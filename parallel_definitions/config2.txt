@@ -1,0 +1,9 @@
+r0x = -2 #distance of A2 from A1 on x axis
+r0z = 1 #distance of A2 from A1 on z axis
+r = 1.5 #pivot length of servo 2
+n1 = 6.5 #length of upper paralelogram
+n2 = 7 #length of arm from A2a to C
+f = math.fabs(r0x) #length of foot
+l = 1.5 #length of elbow at C
+p = 6.5 #distance from C to D
+phi = 120 #angle between elbow and lower leg

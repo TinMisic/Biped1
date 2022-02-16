@@ -1,0 +1,9 @@
+The prints have arrived and I am very satisfied with their quality. There seems to be a problem with the number and type of some prints though:
+-There is only an NP_FootL.stl, there isn't an NP_FootR.stl. These models are symetrical, but not the same. I think one ParallelL.stl was mistaken to be NP_FootR, so I have recieved 2x ParallelL, 1x ParallelR and 1x NP_FootL, but I should have recieved 1x ParallelL, 1x ParallelR, 1x NP_FootL and 1x NP_FootR.
+-I have recieved 2x edgeLev21, and that is OK. But 2x edgeLev22 are missing.
+
+In total, the parts I am missing are:
+1x NP_FootR,
+2x edgeLev22
+
+Can you please help me resolve this issue? If it is needed, I can send the files that need to be re-printed. All other prints are very good and I am satisfied with them.

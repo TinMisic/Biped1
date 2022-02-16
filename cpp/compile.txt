@@ -1,0 +1,3 @@
+g++ -I C:\MinGW\include\Eigen parallel_util.cpp parallel_util_test.cpp -o parallel_util_test.exe
+              ^             ^                           ^                          ^
+        include Eigen     header definitions           main                     output executable

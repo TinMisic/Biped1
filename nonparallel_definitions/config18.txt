@@ -1,0 +1,7 @@
+r0x = -2 #distance of A2 from A1 on x axis
+r0z = 0.50464 #distance of A2 from A1 on z axis
+r1 = 2.01286 #distance from A1 to B1, MAKE IT EQUAL TO r0x?
+r2 = 3.4 #distance from A2 to B2
+n1 = 3.5 #distance from B1 to C
+n2 = 2.01286 #distance from B2 to C
+p1 = 3.5 #distance from C to D

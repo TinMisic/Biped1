@@ -1,0 +1,9 @@
+r0x = -2 #distance of A2 from A1 on x axis
+r0z = 0.50464 #distance of A2 from A1 on z axis
+r = 1.61286 #pivot length of servo 2
+n1 = 5 #length of upper paralelogram
+n2 = 4.75 #length of arm from A2a to C
+f = 1.5 #length of foot
+l = 1.2 #length of elbow at C
+p = 5 #distance from C to D
+phi = 150 #angle between elbow and lower leg

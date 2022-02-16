@@ -1,0 +1,26 @@
+TOTAL:1749.86Kn
+
+1 * 7.4V 2200 mAh Lipo; 35 KM,134.66Kn
+	https://www.olx.ba/artikal/42700059/lipo-baterija-2200mah-2s-25c-7-4v
+1 * LiPo punjac; 25 KM, 96Kn
+	https://www.olx.ba/artikal/35433637/lipo-battery-charger-lipo-punjac-2s-3s
+6 * 8.4V servo; 120.7Kn * 6= 724.2Kn
+	https://shop.sokoli.hr/proizvod/robot-servo-rds31353-5nmmetal270ocoreless8-4v/
+1 * Croduino Basic 3; 89Kn
+	https://e-radionica.com/hr/croduino-basic3.html
+1 * mini voltmetar; 25Kn
+	https://e-radionica.com/hr/mini-voltmetar-do-30v.html
+1 * set termobuzira; 25Kn
+	https://e-radionica.com/hr/set-termobuzira.html
+1 * Zica za prototipiranje; 15Kn
+	https://e-radionica.com/hr/zica-za-prototipiranje-10m-awg25-bijela.html
+1 * Vodljivi konac; 9Kn
+	https://e-radionica.com/hr/vodljivi-konac.html
+1 * lemilica; 107Kn
+	https://kronos.hr/lemilice/10970-lemilica-set-4-dijelni.html
+1 * flux za lemljenje; 15Kn
+	https://e-radionica.com/hr/flux-za-lemljenje-40g.html
+1 * protoboard; 5Kn
+	https://e-radionica.com/hr/busena-plocica-protoboard-2x8cm.html
+1 * 3D-printed parts; 505Kn
+	https://www.treatstock.com/workbench/order/view/158064
