@@ -38,8 +38,8 @@ try:
             print("Invalid note.")
             continue
         
-        board.play_tone(TONE_PIN, freq, 500)
-        time.sleep(1)
+        board.play_tone(TONE_PIN, freq, 250)
+        time.sleep(250/1000)
         #board.play_tone_off(TONE_PIN)
 
     # # specify pin, frequency and duration and play tone
