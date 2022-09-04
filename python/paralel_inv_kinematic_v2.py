@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import coord_class_3D_p_v2 as co
+import matplotlib.pyplot as plt
 
 def isAcceptable(A, B, C, direct):
     '''direct: left is -1, right is 1'''
@@ -10,7 +11,7 @@ def isAcceptable(A, B, C, direct):
     angle = 90
     if(vec1[0] != 0):
         angle = math.degrees(math.atan(vec1[2] / vec1[0]))
-        if(angle < 90):
+        if(angle < 0):
             angle += 180
 
     # rotate around Y
@@ -47,15 +48,18 @@ def getAlphas(D, leg):
     D_l = x_leg_origin.inv().matrix.dot(D)
 
     #3 - unrotate D to find alpha0
-    angle0 = math.degrees(math.atan2(D_l[2], D_l[1])) + 90
-    phi0 = math.radians(angle0)
+    alpha0 = math.degrees(math.atan2(D_l[2], D_l[1])) + 90
+    phi0 = math.radians(alpha0)
     rotX = np.array([[1,0,0,0],[0,math.cos(phi0),-math.sin(phi0),0],[0,math.sin(phi0),math.cos(phi0),0],[0, 0, 0, 1]])
     
     D_unrot = rotX.dot(D_l) # now D is on plane x|z
     D_fin = D_unrot[0:3] # de-homogenize
+    points["D"] = D_fin
 
     A1 = co.T_A1_LEG.trans() # position of A1 in leg frame
     A2 = A1 + co.A2_IN_A1
+    points["A1"]=A1
+    points["A2"]=A2
 
     if(np.linalg.norm(A1 - D_fin) > co.N1_LEN + co.P_LEN):
         raise ValueError("D is unreachable.")
@@ -64,10 +68,11 @@ def getAlphas(D, leg):
     K1 = co.Circle(A1, co.N1_LEN)
     K2 = co.Circle(D_fin, co.P_LEN)
     B11, B12 = K1.intersect(K2)
-    if(B11 == None and B12 == None):
+    if(B11 is None and B12 is None):
         raise ValueError("D must not be equal to A1.")
-    elif(B11!=None and B12==None):
-        B1 = co.Point(B11[0],B11[1],B11[2])
+    elif(B11 is not None and B12 is None):
+        B1 = np.array([B11[0],B11[1],B11[2]])
+        points["B1"]=B1
         if(A1[0] != B1[0]):
             sl_n1 = (A1[2] - B1[2]) / (A1[0] - B1[0])
             alpha1 = math.degrees(math.atan(sl_n1)) 
@@ -83,16 +88,18 @@ def getAlphas(D, leg):
         xc = B1[0] - co.F_LEN + co.L_LEN * math.cos(math.radians(beta1 - co.PHI))
         zc = B1[2] + co.L_LEN * math.sin(math.radians(beta1 - co.PHI))
         C = np.array([xc, 0, zc])
+        points["C"]=C
 
         K3 = co.Circle(A2, co.R_LEN)
         K4 = co.Circle(C, co.N2_LEN)
 
         A2a1, A2a2 = K3.intersect(K4)
 
-        if(A2a1==None and A2a2==None):
+        if(A2a1 is None and A2a2 is None):
             raise ValueError("Error in n2")
-        elif(A2a1!=None and A2a2==None):
+        elif(A2a1 is not None and A2a2 is None):
             A2a = np.array([A2a1[0], A2a1[1], A2a1[2]])
+            points["A2a"]=A2a
 
             if(A2a[0] != A2[0]):
                 sl_r = (A2[2] - A2a[2]) / (A2[0] - A2a[0])
@@ -100,35 +107,31 @@ def getAlphas(D, leg):
             else:
                 alpha2 = -90
 
-            points["B1"] = B1
-            points["C"] = C
-            points["A2a"] = A2a
         else:
             if(isAcceptable(A2, A2a1, C,-1)):
                 A2a = np.array([A2a1[0],A2a1[1],A2a1[2]])
             else:
                 A2a = np.array([A2a2[0],A2a2[1],A2a2[2]])
 
+            points["A2a"]=A2a
             if(A2a[0] != A2[0]):
                 sl_r = (A2[2] - A2a[2]) / (A2[0] - A2a[0])
                 alpha2 = math.degrees(math.atan(sl_r)) 
             else:
                 alpha2 = -90
 
-            points["B1"] = B1
-            points["C"] = C
-            points["A2a"] = A2a
     else:
         if(isAcceptable(A1,B11,D_fin,-1)):
             B1 = np.array([B11[0], B11[1], B11[2]])
         else:
             B1 = np.array([B12[0], B12[1], B12[2]])
 
+        points["B1"]=B1
         if(A1[0] != B1[0]):
             sl_n1 = (A1[2] - B1[2]) / (A1[0] - B1[0])
             alpha1 = math.degrees(math.atan(sl_n1))
         else:
-            alpha = -90
+            alpha1 = -90
 
         if(D_fin[0] != B1[0]):
             sl_p = (D_fin[2] - B1[2]) / (D_fin[0] - B1[0])
@@ -139,16 +142,18 @@ def getAlphas(D, leg):
         xc = B1[0] - co.F_LEN + co.L_LEN * math.cos(math.radians(beta1 - co.PHI))
         zc = B1[2] + co.L_LEN * math.sin(math.radians(beta1 - co.PHI))
         C =  np.array([xc, 0, zc])
+        points["C"]=C
 
         K3 = co.Circle(A2, co.R_LEN)
         K4 = co.Circle(C, co.N2_LEN)
 
         A2a1, A2a2 = K3.intersect(K4)
 
-        if(A2a1==None and A2a2==None):
+        if(A2a1 is None and A2a2 is None):
             raise ValueError("Error in n2")
-        elif(A2a1!=None and A2a2==None):
+        elif(A2a1 is not None and A2a2 is None):
             A2a = np.array([A2a1[0], A2a1[1], A2a1[2]])
+            points["A2a"]=A2a
 
             if(A2a[0] != A2[0]):
                 sl_r = (A2[2] - A2a[2]) / (A2[0] - A2a[0])
@@ -156,23 +161,38 @@ def getAlphas(D, leg):
             else:
                 alpha2 = -90
 
-            points["B1"] = B1
-            points["C"] = C
-            points["A2a"] = A2a
         else:
             if(isAcceptable(A2, A2a1, C,-1)):
                 A2a = np.array([A2a1[0],A2a1[1],A2a1[2]])
             else:
-                A2a = np.array(A2a2[0],A2a2[1],A2a2[2])
+                A2a = np.array([A2a2[0],A2a2[1],A2a2[2]])
 
+            points["A2a"]=A2a
             if(A2a[0] != A2[0]):
                 sl_r = (A2[2] - A2a[2]) / (A2[0] - A2a[0])
                 alpha2 = math.degrees(math.atan(sl_r)) 
             else:
                 alpha2 = -90
 
-            points["B1"] = B1
-            points["C"] = C
-            points["A2a"] = A2a
-
     return alpha0, alpha1, alpha2, points
+
+if __name__=="__main__":
+    # x = float(input("x: "))
+    # y = float(input("y: "))
+    # z = float(input("z: "))
+
+    # D = ([x, y, z, 1])
+    D = np.array([40.56984,0,-410.2069304,1])
+    D = co.RIGHT_LEG_ORIGIN.matrix.dot(D)
+
+    a0,a1,a2,pnts=getAlphas(D, "r")
+    print("a0: "+str(a0)+"\na1: "+str(a1)+"\na2: "+str(a2))
+    xs=list()
+    ys=list()
+    for k in pnts.keys():
+        print(k + ": " + str(pnts[k][0]) + " , " + str(pnts[k][2]))
+        xs.append(pnts[k][0])
+        ys.append(pnts[k][2])
+
+    plt.scatter(xs,ys)
+    plt.show()

@@ -103,12 +103,14 @@ ROOT = Transformation(np.eye(4))
 
 LEFT_LEG_ORIGIN = Transformation(np.array([[1, 0, 0, 0],
                                            [0, 1, 0, 102.5],
-                                           [0, 0, 1, -14.5]]))
+                                           [0, 0, 1, -14.5],
+                                           [0, 0, 0, 1]]))
 '''Center of left shoulder servo rotation axis in the root coordinate frame'''                                           
 
 RIGHT_LEG_ORIGIN = Transformation(np.array([[1, 0, 0, 0],
                                             [0, 1, 0, -102.5],
-                                            [0, 0, 1, -14.5]]))
+                                            [0, 0, 1, -14.5],
+                                            [0, 0, 0, 1]]))
 '''Center of right shoulder servo rotation axis in the root coordinate frame'''   
 
 T_A1_LEG = Transformation(np.array([[1, 0, 0, 60.2],
@@ -139,8 +141,8 @@ PHI = 150.0
 '''Angle between elbow and lower leg'''
 
 if __name__=="__main__":
-    K1 = Circle(np.array([1,0,0]),2.0)
-    K2 = Circle(np.array([-1,0,0]),2.0)
+    K1 = Circle(np.array([60.2,0,-70.232]),187.5)
+    K2 = Circle(np.array([40.56984,0,-410.2069304]),187.5)
     P1, P2 = K1.intersect(K2)
     print(P1[0],",",P1[1],",",P1[2])
     print(P2[0],",",P2[1],",",P2[2])

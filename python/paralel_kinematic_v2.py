@@ -37,7 +37,8 @@ def getD(alpha0, alpha1, alpha2, leg):
     z = np.linalg.norm(A2a - B1a)
     y = np.linalg.norm(A2a - B1)
 
-    zeta = math.degrees(math.acos(z**2 + co.L_LEN**2 - co.N2_LEN**2) / (2 * z * co.L_LEN))
+    mid = (z**2 + co.L_LEN**2 - co.N2_LEN**2) / (2 * z * co.L_LEN)
+    zeta = math.degrees(math.acos(mid))
     theta = math.degrees(math.acos((z**2 + co.F_LEN**2 - y**2) / (2 * z * co.F_LEN)))
     Da = np.array([B1a[0] + co.P_LEN * math.cos(math.radians(zeta + theta + co.PHI)),
                    0,
@@ -62,18 +63,18 @@ def getD(alpha0, alpha1, alpha2, leg):
     D = x_leg_origin.matrix.dot(D_hom)
 
     #6 - checking inverse model
-    al1 = alpha1
-    al2 = alpha2
-    al0 = alpha0
-    if(alpha1 < -90):
-        al1 = alpha1 + 180
-    if(alpha2 < -90):
-        al2 = alpha2 + 180
-    if(alpha0 < -90):
-        al0 = alpha0 + 180
+    # al1 = alpha1
+    # al2 = alpha2
+    # al0 = alpha0
+    # if(alpha1 < -90):
+    #     al1 = alpha1 + 180
+    # if(alpha2 < -90):
+    #     al2 = alpha2 + 180
+    # if(alpha0 < -90):
+    #     al0 = alpha0 + 180
 
-    chk0,chk1,chk2,_ = inv.getAlphas(D)
-    if(math.fabs(chk1 - al1) > 0.1 or math.fabs(chk2 - al2) > 0.1 or math.fabs(chk0 - al0) > 0.1):
-        raise ValueError("Not consistent with inverse model.")
+    # chk0,chk1,chk2,_ = inv.getAlphas(D)
+    # if(math.fabs(chk1 - al1) > 0.1 or math.fabs(chk2 - al2) > 0.1 or math.fabs(chk0 - al0) > 0.1):
+    #     raise ValueError("Not consistent with inverse model.")
 
     return D

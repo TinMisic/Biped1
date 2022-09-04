@@ -240,11 +240,12 @@ phi = 150 #angle between elbow and lower leg
 
 
 if __name__=="__main__":
-    A=Point(2,0,0)
-    B=Point(0,0,0)
-    K1 = Circle(A,1.0)
-    K2 = Circle(B,1.0)
-    P1,_=K1.intersect(K2)
+    A=Point(60.2,0,-70.232)
+    B=Point(40.56984,0,-410.2069304)
+    K1 = Circle(A,187.5)
+    K2 = Circle(B,187.5)
+    P1,P2=K1.intersect(K2)
     print(P1.x,",",P1.y,",",P1.z)
+    print(P2.x,",",P2.y,",",P2.z)
 
     
