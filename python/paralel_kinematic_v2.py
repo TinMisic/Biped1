@@ -45,7 +45,7 @@ def getD(alpha0, alpha1, alpha2, leg):
                    B1a[2] + co.P_LEN * math.sin(math.radians(zeta + theta + co.PHI))])
 
     #3 - calculating D
-    unrot_D = np.array([Da[0] + co.F_LEN], 0, Da[2])
+    unrot_D = np.array([Da[0] + co.F_LEN, 0, Da[2]])
 
     #4 - rotating D by alpha0 around x axis (axis of rotation of servo A0, the current origin)
     alpha0rad = math.radians(alpha0)
@@ -62,19 +62,23 @@ def getD(alpha0, alpha1, alpha2, leg):
 
     D = x_leg_origin.matrix.dot(D_hom)
 
-    #6 - checking inverse model
-    # al1 = alpha1
-    # al2 = alpha2
-    # al0 = alpha0
-    # if(alpha1 < -90):
-    #     al1 = alpha1 + 180
-    # if(alpha2 < -90):
-    #     al2 = alpha2 + 180
-    # if(alpha0 < -90):
-    #     al0 = alpha0 + 180
+    # 6 - checking inverse model
+    al1 = alpha1
+    al2 = alpha2
+    al0 = alpha0
 
-    # chk0,chk1,chk2,_ = inv.getAlphas(D)
-    # if(math.fabs(chk1 - al1) > 0.1 or math.fabs(chk2 - al2) > 0.1 or math.fabs(chk0 - al0) > 0.1):
-    #     raise ValueError("Not consistent with inverse model.")
+    chk0,chk1,chk2,_ = inv.getAlphas(D,leg)
+    if(math.fabs(chk1 - al1) > 0.1 or math.fabs(chk2 - al2) > 0.1 or math.fabs(chk0 - al0) > 0.1):
+        raise ValueError("Not consistent with inverse model.")
 
     return D
+
+if __name__=="__main__":
+    alpha0 = float(input("0: "))
+    alpha1 = float(input("1: "))
+    alpha2 = float(input("2: "))
+
+    D = getD(alpha0,alpha1,alpha2,"r")
+    D = co.RIGHT_LEG_ORIGIN.inv().matrix.dot(D)
+
+    print(D)

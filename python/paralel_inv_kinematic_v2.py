@@ -10,7 +10,7 @@ def isAcceptable(A, B, C, direct):
 
     angle = 90
     if(vec1[0] != 0):
-        angle = math.degrees(math.atan(vec1[2] / vec1[0]))
+        angle = math.degrees(math.atan2(vec1[2], vec1[0]))
         if(angle < 0):
             angle += 180
 
@@ -55,11 +55,13 @@ def getAlphas(D, leg):
     D_unrot = rotX.dot(D_l) # now D is on plane x|z
     D_fin = D_unrot[0:3] # de-homogenize
     points["D"] = D_fin
+    points["Da"] = np.array([D_fin[0]-co.F_LEN,D_fin[1],D_fin[2]])
 
     A1 = co.T_A1_LEG.trans() # position of A1 in leg frame
     A2 = A1 + co.A2_IN_A1
     points["A1"]=A1
     points["A2"]=A2
+    points["A1a"] = np.array([A1[0]-co.F_LEN,A1[1],A1[2]])
 
     if(np.linalg.norm(A1 - D_fin) > co.N1_LEN + co.P_LEN):
         raise ValueError("D is unreachable.")
@@ -73,9 +75,10 @@ def getAlphas(D, leg):
     elif(B11 is not None and B12 is None):
         B1 = np.array([B11[0],B11[1],B11[2]])
         points["B1"]=B1
+        points["B1a"] = np.array([B1[0]-co.F_LEN,B1[1],B1[2]])
         if(A1[0] != B1[0]):
             sl_n1 = (A1[2] - B1[2]) / (A1[0] - B1[0])
-            alpha1 = math.degrees(math.atan(sl_n1)) 
+            alpha1 = math.degrees(math.atan2((B1[2] - A1[2]),(B1[0] - A1[0]))) 
         else:
             alpha1 = -90
 
@@ -103,7 +106,7 @@ def getAlphas(D, leg):
 
             if(A2a[0] != A2[0]):
                 sl_r = (A2[2] - A2a[2]) / (A2[0] - A2a[0])
-                alpha2 = math.degrees(math.atan(sl_r)) 
+                alpha2 = math.degrees(math.atan2((A2a[2] - A2[2]), (A2a[0] - A2a[0]))) 
             else:
                 alpha2 = -90
 
@@ -116,7 +119,7 @@ def getAlphas(D, leg):
             points["A2a"]=A2a
             if(A2a[0] != A2[0]):
                 sl_r = (A2[2] - A2a[2]) / (A2[0] - A2a[0])
-                alpha2 = math.degrees(math.atan(sl_r)) 
+                alpha2 = math.degrees(math.atan2((A2a[2] - A2[2]),(A2a[0] - A2[0]))) 
             else:
                 alpha2 = -90
 
@@ -127,9 +130,10 @@ def getAlphas(D, leg):
             B1 = np.array([B12[0], B12[1], B12[2]])
 
         points["B1"]=B1
+        points["B1a"] = np.array([B1[0]-co.F_LEN,B1[1],B1[2]])
         if(A1[0] != B1[0]):
             sl_n1 = (A1[2] - B1[2]) / (A1[0] - B1[0])
-            alpha1 = math.degrees(math.atan(sl_n1))
+            alpha1 = math.degrees(math.atan2((B1[2] - A1[2]), (B1[0] - A1[0])))
         else:
             alpha1 = -90
 
@@ -157,7 +161,7 @@ def getAlphas(D, leg):
 
             if(A2a[0] != A2[0]):
                 sl_r = (A2[2] - A2a[2]) / (A2[0] - A2a[0])
-                alpha2 = math.degrees(math.atan(sl_r)) 
+                alpha2 = math.degrees(math.atan2((A2a[2] - A2[2]), (A2a[0] - A2[0]))) 
             else:
                 alpha2 = -90
 
@@ -170,10 +174,12 @@ def getAlphas(D, leg):
             points["A2a"]=A2a
             if(A2a[0] != A2[0]):
                 sl_r = (A2[2] - A2a[2]) / (A2[0] - A2a[0])
-                alpha2 = math.degrees(math.atan(sl_r)) 
+                alpha2 = math.degrees(math.atan2((A2a[2] - A2[2]), (A2a[0] - A2[0]))) 
             else:
                 alpha2 = -90
 
+    if (alpha2 >= 90 and alpha2 <=180):
+        alpha2 += -360     #More convenient to have alpha2 always negative
     return alpha0, alpha1, alpha2, points
 
 if __name__=="__main__":
@@ -182,7 +188,7 @@ if __name__=="__main__":
     # z = float(input("z: "))
 
     # D = ([x, y, z, 1])
-    D = np.array([40.56984,0,-410.2069304,1])
+    D = np.array([217.256889178,0,-401.112638067,1])
     D = co.RIGHT_LEG_ORIGIN.matrix.dot(D)
 
     a0,a1,a2,pnts=getAlphas(D, "r")
@@ -190,7 +196,7 @@ if __name__=="__main__":
     xs=list()
     ys=list()
     for k in pnts.keys():
-        print(k + ": " + str(pnts[k][0]) + " , " + str(pnts[k][2]))
+        #print(k + ": " + str(pnts[k][0]) + " , " + str(pnts[k][2]))
         xs.append(pnts[k][0])
         ys.append(pnts[k][2])
 
