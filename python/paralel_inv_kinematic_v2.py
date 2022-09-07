@@ -2,6 +2,7 @@ import math
 import numpy as np
 import coord_class_3D_p_v2 as co
 import matplotlib.pyplot as plt
+import time
 
 def isAcceptable(A, B, C, direct):
     '''direct: left is -1, right is 1'''
@@ -191,14 +192,17 @@ if __name__=="__main__":
     D = np.array([217.256889178,0,-401.112638067,1])
     D = co.RIGHT_LEG_ORIGIN.matrix.dot(D)
 
+    t_start = time.time()
     a0,a1,a2,pnts=getAlphas(D, "r")
+    t_end = time.time()
     print("a0: "+str(a0)+"\na1: "+str(a1)+"\na2: "+str(a2))
-    xs=list()
-    ys=list()
-    for k in pnts.keys():
-        #print(k + ": " + str(pnts[k][0]) + " , " + str(pnts[k][2]))
-        xs.append(pnts[k][0])
-        ys.append(pnts[k][2])
+    print("t="+str((t_end-t_start)))
+    # xs=list()
+    # ys=list()
+    # for k in pnts.keys():
+    #     #print(k + ": " + str(pnts[k][0]) + " , " + str(pnts[k][2]))
+    #     xs.append(pnts[k][0])
+    #     ys.append(pnts[k][2])
 
-    plt.scatter(xs,ys)
-    plt.show()
+    # plt.scatter(xs,ys)
+    # plt.show()
