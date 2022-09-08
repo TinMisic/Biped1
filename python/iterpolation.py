@@ -3,7 +3,7 @@ import time
 class Interpolation:
     """Interpolates between initial value and final value in given duration."""
 
-    def __init__(self, initVal, increment, dist_op, adder_op):
+    def __init__(self, initVal, increment, dist_op, adder_op, eq_op):
         """Initializer of initial value and value increment(float)
         
            dist_op(val1, val2) is the given function with which to calculate distance between values
@@ -11,11 +11,13 @@ class Interpolation:
         """
         self.startVal = initVal
         self.currVal = initVal
+        self.prevVal = initVal
         self.endVal = initVal
         self.increment = increment
         
         self.dist_op = dist_op
         self.adder_op = adder_op
+        self.eq_op = eq_op
 
         self.speed = 0
         self.start = time.time() * 1000
@@ -31,10 +33,10 @@ class Interpolation:
 
         self.start = time.time() * 1000
 
-        print("New interpolation started:")
-        print("currVal:"+str(self.currVal))
-        print("endVal:"+str(self.endVal))
-        print("accel:"+str(self.accel))
+        # print("New interpolation started:")
+        # print("currVal:"+str(self.currVal))
+        # print("endVal:"+str(self.endVal))
+        # print("accel:"+str(self.accel))
 
         return self.currVal
 
@@ -43,19 +45,22 @@ class Interpolation:
         """Updates current value and returns it as output"""
         currTime = time.time() * 1000
         elapsed  = currTime - self.start
-        if(self.currVal != self.endVal):
-
-            if(elapsed <= self.duration / 2):
-                covered = (self.accel * elapsed**2 / 2) // self.increment * self.increment
-            else:
-                el = elapsed - self.duration/2
-                covered = ((self.speed * el - self.accel * el**2 / 2) + self.dist_op(self.endVal, self.startVal) / 2) // self.increment * self.increment
-
-            self.currVal = self.adder_op(self.startVal, self.endVal, covered)
+        if(not self.eq_op(self.currVal,self.endVal)):
             if(elapsed >= self.duration):
                 self.currVal = self.endVal
                 self.speed = 0
                 self.accel = 0
-                print("Goal "+str(self.currVal)+" reached in "+str(elapsed)+" millis")                
+                # print("Goal "+str(self.currVal)+" reached in "+str(elapsed)+" millis")
+            else:
+                if(elapsed <= self.duration / 2):
+                    covered = (self.accel * elapsed**2 / 2) // self.increment * self.increment
+                else:
+                    el = elapsed - self.duration/2
+                    covered = ((self.speed * el - self.accel * el**2 / 2) + self.dist_op(self.endVal, self.startVal) / 2) // self.increment * self.increment
+
+                self.currVal = self.adder_op(self.startVal, self.endVal, covered)              
 
         return self.currVal
+
+    def isFinished(self):
+        return self.eq_op(self.currVal,self.endVal)

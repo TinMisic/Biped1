@@ -10,31 +10,38 @@ def dist(a, b):
 def adder(start, end, covered):
     return start + covered
 
-int1 = inter.Interpolation(0, 1,dist,adder)
-t = 10000
-target = 10000
-val = int1.go(target, t)
-start = time.time()
-first=False
-second = False
+def eq_op(a, b):
+    return a == b
 
-def calc():
-    global first
-    global second
+int1 = inter.Interpolation(0, 0.01,dist,adder,eq_op)
+t = 12000
+target = 100
+val = int1.go(target, t/4)
+start = time.time()
+cleared = [False,False,False,False]
+
+def calc(ts):
+    global cleared
     val = int1.update()
-    #print(val)
-    if(val>=4000 and not first):
-        int1.go(10000,t)
-        first = True
-    # if(val>=6000 and not second):
-    #     int1.go(1000,t)
-    #     second=True
+    # print(val)
+    if ts>16 and not cleared[3]:
+        int1.go(-500,t)
+        cleared[3] = True
+    elif ts>10 and not cleared[2]:
+        int1.go(0,t)
+        cleared[2] = True
+    elif ts>6 and not cleared[1]:
+        int1.go(200,t/2)
+        cleared[1] = True
+    elif ts>4 and not cleared[0]:
+        int1.go(-300,t/4)
+        cleared[0] = True
 
     return val
 
 def update(frame):
     x_data.append((time.time()-start))
-    y_data.append(calc())
+    y_data.append(calc(time.time()-start))
     line.set_data(x_data, y_data)
     figure.gca().relim()
     figure.gca().autoscale_view()
