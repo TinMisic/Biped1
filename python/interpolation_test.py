@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import time
 import iterpolation as inter
+import math
 
 def dist(a, b):
     return a - b
@@ -14,16 +15,20 @@ t = 10000
 target = 10000
 val = int1.go(target, t)
 start = time.time()
-down=False
+first=False
+second = False
 
 def calc():
-    global down
+    global first
+    global second
     val = int1.update()
-    if(val>=4000 and not down):
-        int1.go(7500,t)
-    if(val>=6000 and not down):
-        int1.go(1000,t)
-        down=True
+    #print(val)
+    if(val>=4000 and not first):
+        int1.go(10000,t)
+        first = True
+    # if(val>=6000 and not second):
+    #     int1.go(1000,t)
+    #     second=True
 
     return val
 
