@@ -22,9 +22,9 @@ try:
     board.servo_write(4, int((90 + center) * scale))
     board.set_pin_mode_servo(5)       # R0
     board.servo_write(5, int((0 + center) * scale))
-    board.set_pin_mode_servo(6)
+    board.set_pin_mode_servo(6)       # R1
     board.servo_write(6, int((-45 + center) * scale))
-    board.set_pin_mode_servo(7)
+    board.set_pin_mode_servo(7)       # R2
     board.servo_write(7, int((-90 + center) * scale))
 
     while(True):

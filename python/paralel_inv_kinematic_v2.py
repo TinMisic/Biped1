@@ -34,7 +34,6 @@ def getAlphas(D, leg):
     alpha0 = 0
     alpha1 = 0
     alpha2 = 0
-    points = dict()
     D = np.array([D[0],D[1],D[2],1]) 
 
     x_leg_origin = None
@@ -55,14 +54,9 @@ def getAlphas(D, leg):
     
     D_unrot = rotX.dot(D_l) # now D is on plane x|z
     D_fin = D_unrot[0:3] # de-homogenize
-    points["D"] = D_fin
-    points["Da"] = np.array([D_fin[0]-co.F_LEN,D_fin[1],D_fin[2]])
 
     A1 = co.T_A1_LEG.trans() # position of A1 in leg frame
     A2 = A1 + co.A2_IN_A1
-    points["A1"]=A1
-    points["A2"]=A2
-    points["A1a"] = np.array([A1[0]-co.F_LEN,A1[1],A1[2]])
 
     if(np.linalg.norm(A1 - D_fin) > co.N1_LEN + co.P_LEN):
         raise ValueError("D is unreachable.")
@@ -75,8 +69,6 @@ def getAlphas(D, leg):
         raise ValueError("D must not be equal to A1.")
     elif(B11 is not None and B12 is None):
         B1 = np.array([B11[0],B11[1],B11[2]])
-        points["B1"]=B1
-        points["B1a"] = np.array([B1[0]-co.F_LEN,B1[1],B1[2]])
         if(A1[0] != B1[0]):
             sl_n1 = (A1[2] - B1[2]) / (A1[0] - B1[0])
             alpha1 = math.degrees(math.atan2((B1[2] - A1[2]),(B1[0] - A1[0]))) 
@@ -92,7 +84,6 @@ def getAlphas(D, leg):
         xc = B1[0] - co.F_LEN + co.L_LEN * math.cos(math.radians(beta1 - co.PHI))
         zc = B1[2] + co.L_LEN * math.sin(math.radians(beta1 - co.PHI))
         C = np.array([xc, 0, zc])
-        points["C"]=C
 
         K3 = co.Circle(A2, co.R_LEN)
         K4 = co.Circle(C, co.N2_LEN)
@@ -103,7 +94,6 @@ def getAlphas(D, leg):
             raise ValueError("Error in n2")
         elif(A2a1 is not None and A2a2 is None):
             A2a = np.array([A2a1[0], A2a1[1], A2a1[2]])
-            points["A2a"]=A2a
 
             if(A2a[0] != A2[0]):
                 sl_r = (A2[2] - A2a[2]) / (A2[0] - A2a[0])
@@ -117,7 +107,6 @@ def getAlphas(D, leg):
             else:
                 A2a = np.array([A2a2[0],A2a2[1],A2a2[2]])
 
-            points["A2a"]=A2a
             if(A2a[0] != A2[0]):
                 sl_r = (A2[2] - A2a[2]) / (A2[0] - A2a[0])
                 alpha2 = math.degrees(math.atan2((A2a[2] - A2[2]),(A2a[0] - A2[0]))) 
@@ -130,8 +119,6 @@ def getAlphas(D, leg):
         else:
             B1 = np.array([B12[0], B12[1], B12[2]])
 
-        points["B1"]=B1
-        points["B1a"] = np.array([B1[0]-co.F_LEN,B1[1],B1[2]])
         if(A1[0] != B1[0]):
             sl_n1 = (A1[2] - B1[2]) / (A1[0] - B1[0])
             alpha1 = math.degrees(math.atan2((B1[2] - A1[2]), (B1[0] - A1[0])))
@@ -147,7 +134,6 @@ def getAlphas(D, leg):
         xc = B1[0] - co.F_LEN + co.L_LEN * math.cos(math.radians(beta1 - co.PHI))
         zc = B1[2] + co.L_LEN * math.sin(math.radians(beta1 - co.PHI))
         C =  np.array([xc, 0, zc])
-        points["C"]=C
 
         K3 = co.Circle(A2, co.R_LEN)
         K4 = co.Circle(C, co.N2_LEN)
@@ -158,7 +144,6 @@ def getAlphas(D, leg):
             raise ValueError("Error in n2")
         elif(A2a1 is not None and A2a2 is None):
             A2a = np.array([A2a1[0], A2a1[1], A2a1[2]])
-            points["A2a"]=A2a
 
             if(A2a[0] != A2[0]):
                 sl_r = (A2[2] - A2a[2]) / (A2[0] - A2a[0])
@@ -172,7 +157,6 @@ def getAlphas(D, leg):
             else:
                 A2a = np.array([A2a2[0],A2a2[1],A2a2[2]])
 
-            points["A2a"]=A2a
             if(A2a[0] != A2[0]):
                 sl_r = (A2[2] - A2a[2]) / (A2[0] - A2a[0])
                 alpha2 = math.degrees(math.atan2((A2a[2] - A2[2]), (A2a[0] - A2[0]))) 
@@ -181,7 +165,7 @@ def getAlphas(D, leg):
 
     if (alpha2 >= 90 and alpha2 <=180):
         alpha2 += -360     #More convenient to have alpha2 always negative
-    return alpha0, alpha1, alpha2, points
+    return alpha0, alpha1, alpha2
 
 if __name__=="__main__":
     # x = float(input("x: "))
@@ -193,7 +177,7 @@ if __name__=="__main__":
     D = co.RIGHT_LEG_ORIGIN.matrix.dot(D)
 
     t_start = time.time()
-    a0,a1,a2,pnts=getAlphas(D, "r")
+    a0,a1,a2=getAlphas(D, "r")
     t_end = time.time()
     print("a0: "+str(a0)+"\na1: "+str(a1)+"\na2: "+str(a2))
     print("t="+str((t_end-t_start)))

@@ -67,7 +67,7 @@ def getD(alpha0, alpha1, alpha2, leg):
     al2 = alpha2
     al0 = alpha0
 
-    chk0,chk1,chk2,_ = inv.getAlphas(D,leg)
+    chk0,chk1,chk2 = inv.getAlphas(D,leg)
     if(math.fabs(chk1 - al1) > 0.1 or math.fabs(chk2 - al2) > 0.1 or math.fabs(chk0 - al0) > 0.1):
         raise ValueError("Not consistent with inverse model.")
 
