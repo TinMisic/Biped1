@@ -11,21 +11,23 @@ from pymata4 import pymata4
 import sys
 
 # function definitions
-def angle_correct(alpha):
-    return int((alpha - offset + center) * scale)
+def angle_correct(alpha, leg):
+    if(leg=="l"):
+        return int((-alpha - offset + center) * scale)
+    return int((alpha + offset + center) * scale)
 
 def move_servos(left_leg_point,right_leg_point):
     #left leg ik
     l0, l1, l2 = pik.getAlphas(left_leg_point,"l")
-    l0 = angle_correct(-l0)
-    l1 = angle_correct(-l1)
-    l2 = angle_correct(-l2)
+    l0 = angle_correct(l0,"l")
+    l1 = angle_correct(l1,"l")
+    l2 = angle_correct(l2,"l")
 
     #right leg
     r0, r1, r2 = pik.getAlphas(right_leg_point,"r")
-    r0 = angle_correct(r0) # !!!
-    r1 = angle_correct(r1)
-    r2 = angle_correct(r2)
+    r0 = angle_correct(r0,"r") # !!!
+    r1 = angle_correct(r1,"r")
+    r2 = angle_correct(r2,"r")
 
     board.servo_write(pins["L0"], l0)
     board.servo_write(pins["L1"], l1)
