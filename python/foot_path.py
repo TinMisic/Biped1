@@ -40,7 +40,7 @@ while(True):
         ip1.go(points[index],t)
 
     val = ip1.update()
-    al1, al2, al3, _ = pik.getAlphas(val,'r')
+    al1, al2, al3 = pik.getAlphas(val,'r')
     print(al1," ",al2," ",al3)
 
     al0_data.append(al1)

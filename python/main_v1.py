@@ -14,18 +14,21 @@ import sys
 def angle_correct(alpha, leg):
     if(leg=="l"):
         return int((-alpha - offset + center) * scale)
-    return int((alpha + offset + center) * scale)
+    elif(leg=="r"):
+        return int((alpha + offset + center) * scale)
+    else:
+        return int((alpha + center) * scale)
 
 def move_servos(left_leg_point,right_leg_point):
     #left leg ik
     l0, l1, l2 = pik.getAlphas(left_leg_point,"l")
-    l0 = angle_correct(l0,"l")
+    l0 = angle_correct(l0,"c")
     l1 = angle_correct(l1,"l")
     l2 = angle_correct(l2,"l")
 
     #right leg
     r0, r1, r2 = pik.getAlphas(right_leg_point,"r")
-    r0 = angle_correct(r0,"r") # !!!
+    r0 = angle_correct(r0,"c")
     r1 = angle_correct(r1,"r")
     r2 = angle_correct(r2,"r")
 
@@ -55,7 +58,7 @@ pins = {"L0":2, "L1":3, "L2":4, "R0":5, "R1":6, "R2":7}
 
 # servo initialization and home pose
 for servo in pins.keys():
-    board.set_pin_mode_servo(servo)
+    board.set_pin_mode_servo(pins[servo])
 
 # servo home pose
 home = [pk.getD(0, -135, -180, "l"),pk.getD(0, -135, -180, "r")]
