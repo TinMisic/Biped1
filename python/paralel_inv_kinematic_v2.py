@@ -1,7 +1,6 @@
 import math
 import numpy as np
 import coord_class_3D_p_v2 as co
-import matplotlib.pyplot as plt
 import time
 
 def isAcceptable(A, B, C, direct):
@@ -168,6 +167,7 @@ def getAlphas(D, leg):
     return alpha0, alpha1, alpha2
 
 if __name__=="__main__":
+    import matplotlib.pyplot as plt
     # x = float(input("x: "))
     # y = float(input("y: "))
     # z = float(input("z: "))
